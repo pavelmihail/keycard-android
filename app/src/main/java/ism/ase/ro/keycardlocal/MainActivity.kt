@@ -8,7 +8,9 @@ import ism.ase.ro.keycardlocal.util.android.NFCCardManager
 import org.bouncycastle.util.encoders.Hex
 import ism.ase.ro.keycardlocal.util.io.CardChannel
 import ism.ase.ro.keycardlocal.util.io.CardListener
-import im.status.keycard.applet.*
+import ism.ase.ro.keycardlocal.util.applet.*
+import ism.ase.ro.keycardlocal.util.applet.ApplicationInfo
+import ism.ase.ro.keycardlocal.util.applet.KeycardCommandSet
 
 
 class MainActivity : AppCompatActivity() {

@@ -1,10 +1,5 @@
 package ism.ase.ro.keycardlocal.util.applet;
 
-import im.status.keycard.applet.Pairing;
-import im.status.keycard.io.APDUCommand;
-import im.status.keycard.io.APDUException;
-import im.status.keycard.io.APDUResponse;
-import im.status.keycard.io.CardChannel;
 import org.bouncycastle.crypto.engines.AESEngine;
 import org.bouncycastle.crypto.macs.CBCBlockCipherMac;
 import org.bouncycastle.crypto.params.KeyParameter;
@@ -20,6 +15,11 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.security.*;
 import java.util.Arrays;
+
+import ism.ase.ro.keycardlocal.util.io.APDUCommand;
+import ism.ase.ro.keycardlocal.util.io.APDUException;
+import ism.ase.ro.keycardlocal.util.io.APDUResponse;
+import ism.ase.ro.keycardlocal.util.io.CardChannel;
 
 /**
  * Handles a SecureChannel session with the card.
@@ -44,7 +44,7 @@ public class SecureChannelSession {
   private byte[] secret;
   private byte[] publicKey;
   private byte[] iv;
-  private im.status.keycard.applet.Pairing pairing;
+  private Pairing pairing;
   private Cipher sessionCipher;
   private CBCBlockCipherMac sessionMac;
   private SecretKeySpec sessionEncKey;
@@ -100,7 +100,7 @@ public class SecureChannelSession {
    * Returns the pairing information
    * @return the pairing information
    */
-  public im.status.keycard.applet.Pairing getPairing() {
+  public Pairing getPairing() {
     return pairing;
   }
 
@@ -108,7 +108,7 @@ public class SecureChannelSession {
    * Sets pairing information needed to open a secure channel.
    * @param pairing the pairing information
    */
-  public void setPairing(im.status.keycard.applet.Pairing pairing) {
+  public void setPairing(Pairing pairing) {
     this.pairing = pairing;
   }
 

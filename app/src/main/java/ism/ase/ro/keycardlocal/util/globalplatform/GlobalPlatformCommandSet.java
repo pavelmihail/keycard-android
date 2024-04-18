@@ -1,6 +1,6 @@
 package ism.ase.ro.keycardlocal.util.globalplatform;
 
-import im.status.keycard.applet.Identifiers;
+import ism.ase.ro.keycardlocal.util.applet.Identifiers;
 import org.bouncycastle.util.encoders.Hex;
 
 import java.io.ByteArrayOutputStream;
@@ -8,16 +8,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.SecureRandom;
 
-import im.status.keycard.globalplatform.Crypto;
-import im.status.keycard.globalplatform.Load;
-import im.status.keycard.globalplatform.LoadCallback;
-import im.status.keycard.globalplatform.SCP02Keys;
-import im.status.keycard.globalplatform.SecureChannel;
-import im.status.keycard.globalplatform.Session;
-import im.status.keycard.io.APDUCommand;
-import im.status.keycard.io.APDUException;
-import im.status.keycard.io.APDUResponse;
-import im.status.keycard.io.CardChannel;
+import ism.ase.ro.keycardlocal.util.io.APDUCommand;
+import ism.ase.ro.keycardlocal.util.io.APDUException;
+import ism.ase.ro.keycardlocal.util.io.APDUResponse;
+import ism.ase.ro.keycardlocal.util.io.CardChannel;
 
 /**
  * Command set used for loading, installing and removing applets and packages. This class is generic and can work with
@@ -40,12 +34,12 @@ public class GlobalPlatformCommandSet {
   static final byte LOAD_P1_LAST_BLOCK = (byte) 0x80;
 
   private final CardChannel apduChannel;
-  private im.status.keycard.globalplatform.SecureChannel secureChannel;
-  private im.status.keycard.globalplatform.SCP02Keys cardKeys;
+  private SecureChannel secureChannel;
+  private SCP02Keys cardKeys;
   private Session session;
 
   private final byte[] gpDefaultKey = Hex.decode("404142434445464748494a4b4c4d4e4f");
-  private final im.status.keycard.globalplatform.SCP02Keys gpDefaultKeys = new im.status.keycard.globalplatform.SCP02Keys(gpDefaultKey, gpDefaultKey, gpDefaultKey);
+  private final SCP02Keys gpDefaultKeys = new SCP02Keys(gpDefaultKey, gpDefaultKey, gpDefaultKey);
 
   private final byte[] developmentKey = Hex.decode("c212e073ff8b4bbfaff4de8ab655221f");
 
@@ -104,9 +98,9 @@ public class GlobalPlatformCommandSet {
     APDUResponse resp = apduChannel.send(cmd);
     if (resp.isOK()) {
       try {
-        this.session = im.status.keycard.globalplatform.SecureChannel.verifyChallenge(hostChallenge, this.cardKeys, resp);
+        this.session = SecureChannel.verifyChallenge(hostChallenge, this.cardKeys, resp);
       } catch(APDUException e) {
-        this.session = im.status.keycard.globalplatform.SecureChannel.verifyChallenge(hostChallenge, gpDefaultKeys, resp);
+        this.session = SecureChannel.verifyChallenge(hostChallenge, gpDefaultKeys, resp);
         this.session.markAsUsingFallbackKeys();
       }
       this.secureChannel = new SecureChannel(this.apduChannel, this.session.getKeys());
@@ -130,8 +124,8 @@ public class GlobalPlatformCommandSet {
     System.arraycopy(cardChallenge, 0, data, 0, cardChallenge.length);
     System.arraycopy(hostChallenge, 0, data, cardChallenge.length, hostChallenge.length);
 
-    byte[] paddedData = im.status.keycard.globalplatform.Crypto.appendDESPadding(data);
-    byte[] hostCryptogram = im.status.keycard.globalplatform.Crypto.mac3des(this.session.getKeys().encKeyData, paddedData, im.status.keycard.globalplatform.Crypto.NullBytes8);
+    byte[] paddedData = Crypto.appendDESPadding(data);
+    byte[] hostCryptogram = Crypto.mac3des(this.session.getKeys().encKeyData, paddedData, Crypto.NullBytes8);
 
     APDUCommand cmd = new APDUCommand(0x84, INS_EXTERNAL_AUTHENTICATE, EXTERNAL_AUTHENTICATE_P1, 0, hostCryptogram);
     return this.secureChannel.send(cmd);
@@ -216,7 +210,7 @@ public class GlobalPlatformCommandSet {
    * @throws IOException if the ByteArrayOutputStream throws it (never)
    */
   private void writeSCP02Key(ByteArrayOutputStream bos, byte[] key) throws IOException {
-    byte[] encrypted = im.status.keycard.globalplatform.Crypto.ecb3des(session.getKeys().getDekKeyData(), key);
+    byte[] encrypted = Crypto.ecb3des(session.getKeys().getDekKeyData(), key);
     byte[] kcv = Crypto.kcv3des(key);
 
     bos.write(0x80);

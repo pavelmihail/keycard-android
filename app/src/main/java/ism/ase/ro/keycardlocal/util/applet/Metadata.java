@@ -5,7 +5,6 @@ import java.nio.charset.Charset;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import im.status.keycard.applet.TinyBERTLV;
 
 public class Metadata {
   private String cardName;

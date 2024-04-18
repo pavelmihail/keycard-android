@@ -4,8 +4,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
-import im.status.keycard.applet.BIP32KeyPair;
-import im.status.keycard.applet.MnemonicEnglishDictionary;
 
 public class Mnemonic {
   private final static int WORDLIST_SIZE = 2048;

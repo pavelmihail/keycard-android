@@ -2,21 +2,17 @@ package ism.ase.ro.keycardlocal.util.globalplatform;
 
 import java.io.IOException;
 
-import im.status.keycard.globalplatform.Crypto;
-import im.status.keycard.globalplatform.SCP02Keys;
-import im.status.keycard.globalplatform.SCP02Wrapper;
-import im.status.keycard.globalplatform.Session;
-import im.status.keycard.io.APDUCommand;
-import im.status.keycard.io.APDUException;
-import im.status.keycard.io.APDUResponse;
-import im.status.keycard.io.CardChannel;
+import ism.ase.ro.keycardlocal.util.io.APDUCommand;
+import ism.ase.ro.keycardlocal.util.io.APDUException;
+import ism.ase.ro.keycardlocal.util.io.APDUResponse;
+import ism.ase.ro.keycardlocal.util.io.CardChannel;
 
 /**
  * An SCP02 Secure Channel. Wraps a CardChannel to allow transparent handling of the secure channel.
  */
 public class SecureChannel {
   private CardChannel channel;
-  private im.status.keycard.globalplatform.SCP02Wrapper wrapper;
+  private SCP02Wrapper wrapper;
 
   public static byte[] DERIVATION_PURPOSE_ENC = new byte[]{(byte) 0x01, (byte) 0x82};
   public static byte[] DERIVATION_PURPOSE_MAC = new byte[]{(byte) 0x01, (byte) 0x01};
@@ -28,7 +24,7 @@ public class SecureChannel {
    * @param channel the channel to wrap
    * @param keys the keys
    */
-  public SecureChannel(CardChannel channel, im.status.keycard.globalplatform.SCP02Keys keys) {
+  public SecureChannel(CardChannel channel, SCP02Keys keys) {
     this.channel = channel;
     this.wrapper = new SCP02Wrapper(keys.getMacKeyData());
   }
@@ -55,7 +51,7 @@ public class SecureChannel {
    * @return the Session object built on succesful verification
    * @throws APDUException communication error
    */
-  public static Session verifyChallenge(byte[] hostChallenge, im.status.keycard.globalplatform.SCP02Keys cardKeys, APDUResponse resp) throws APDUException {
+  public static Session verifyChallenge(byte[] hostChallenge, SCP02Keys cardKeys, APDUResponse resp) throws APDUException {
     if (resp.getSw() == APDUResponse.SW_SECURITY_CONDITION_NOT_SATISFIED) {
       throw new APDUException(resp.getSw(), "security condition not satisfied");
     }
@@ -83,7 +79,7 @@ public class SecureChannel {
     byte[] sessionMacKey = Crypto.deriveSCP02SessionKey(cardKeys.getMacKeyData(), seq, DERIVATION_PURPOSE_MAC);
     byte[] sessionDekKey = Crypto.deriveSCP02SessionKey(cardKeys.getDekKeyData(), seq, DERIVATION_PURPOSE_DEK);
 
-    im.status.keycard.globalplatform.SCP02Keys sessionKeys = new SCP02Keys(sessionEncKey, sessionMacKey, sessionDekKey);
+    SCP02Keys sessionKeys = new SCP02Keys(sessionEncKey, sessionMacKey, sessionDekKey);
 
     boolean verified = Crypto.verifyCryptogram(sessionKeys.getEncKeyData(), hostChallenge, cardChallenge, cardCryptogram);
     if (!verified) {

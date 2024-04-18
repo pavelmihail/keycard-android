@@ -7,10 +7,6 @@ import javax.crypto.spec.SecretKeySpec;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-import im.status.keycard.applet.Ethereum;
-import im.status.keycard.applet.RecoverableSignature;
-import im.status.keycard.applet.TinyBERTLV;
-
 /**
  * Represents a BIP32 keypair. This can be a master key or any other key in the path. Contains convenience method to
  * read and write formats the the card understands.
@@ -51,7 +47,7 @@ public class BIP32KeyPair {
    * @return the BIP32 keypair
    */
   public static BIP32KeyPair fromTLV(byte[] tlvData) {
-    im.status.keycard.applet.TinyBERTLV tlv = new TinyBERTLV(tlvData);
+    TinyBERTLV tlv = new TinyBERTLV(tlvData);
     tlv.enterConstructed(TLV_KEY_TEMPLATE);
 
     byte[] pubKey = null;

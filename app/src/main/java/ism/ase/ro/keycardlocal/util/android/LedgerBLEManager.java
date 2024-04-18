@@ -51,14 +51,44 @@ public class LedgerBLEManager {
   }
 
   public void startScan(BluetoothAdapter.LeScanCallback cb) {
-    bluetoothAdapter.startLeScan(new UUID[] { LedgerBLEChannel.LEDGER_UUID}, cb);
+    if (ActivityCompat.checkSelfPermission(this.activity, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+      // TODO: Consider calling
+      //    ActivityCompat#requestPermissions
+      // here to request the missing permissions, and then overriding
+      //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+      //                                          int[] grantResults)
+      // to handle the case where the user grants the permission. See the documentation
+      // for ActivityCompat#requestPermissions for more details.
+      return;
+    }
+    bluetoothAdapter.startLeScan(new UUID[]{LedgerBLEChannel.LEDGER_UUID}, cb);
   }
 
   public void stopScan(BluetoothAdapter.LeScanCallback cb) {
+    if (ActivityCompat.checkSelfPermission(this.activity, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+      // TODO: Consider calling
+      //    ActivityCompat#requestPermissions
+      // here to request the missing permissions, and then overriding
+      //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+      //                                          int[] grantResults)
+      // to handle the case where the user grants the permission. See the documentation
+      // for ActivityCompat#requestPermissions for more details.
+      return;
+    }
     bluetoothAdapter.stopLeScan(cb);
   }
 
   public void connectDevice(BluetoothDevice device) {
+    if (ActivityCompat.checkSelfPermission(this.activity, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+      // TODO: Consider calling
+      //    ActivityCompat#requestPermissions
+      // here to request the missing permissions, and then overriding
+      //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+      //                                          int[] grantResults)
+      // to handle the case where the user grants the permission. See the documentation
+      // for ActivityCompat#requestPermissions for more details.
+      return;
+    }
     if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
       final IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
       activity.registerReceiver(new BroadcastReceiver() {
@@ -74,10 +104,30 @@ public class LedgerBLEManager {
           if (bondState == BluetoothDevice.BOND_BONDED) {
             activity.unregisterReceiver(this);
             // connect/disconnect to make bond permanent
+            if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+              // TODO: Consider calling
+              //    ActivityCompat#requestPermissions
+              // here to request the missing permissions, and then overriding
+              //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+              //                                          int[] grantResults)
+              // to handle the case where the user grants the permission. See the documentation
+              // for ActivityCompat#requestPermissions for more details.
+              return;
+            }
             device.connectGatt(activity, false, new BluetoothGattCallback() {
               @Override
               public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
                 if (newState == BluetoothGatt.STATE_CONNECTED) {
+                  if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                  }
                   gatt.disconnect();
                   onConnected(device);
                 }

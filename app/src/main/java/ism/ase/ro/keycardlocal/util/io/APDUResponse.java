@@ -58,9 +58,9 @@ public class APDUResponse {
    * Asserts that the SW is 0x9000. Throws an exception if it isn't
    *
    * @return this object, to simplify chaining
-   * @throws im.status.keycard.io.APDUException if the SW is not 0x9000
+   * @throws APDUException if the SW is not 0x9000
    */
-  public APDUResponse checkOK() throws im.status.keycard.io.APDUException {
+  public APDUResponse checkOK() throws APDUException {
     return this.checkSW(SW_OK);
   }
 
@@ -69,9 +69,9 @@ public class APDUResponse {
    *
    * @param codes the list of SWs to match.
    * @return this object, to simplify chaining
-   * @throws im.status.keycard.io.APDUException if the SW is not 0x9000
+   * @throws APDUException if the SW is not 0x9000
    */
-  public APDUResponse checkSW(int... codes) throws im.status.keycard.io.APDUException {
+  public APDUResponse checkSW(int... codes) throws APDUException {
     for (int code : codes) {
       if (this.sw == code) {
         return this;
@@ -80,11 +80,11 @@ public class APDUResponse {
 
     switch (this.sw) {
       case SW_SECURITY_CONDITION_NOT_SATISFIED:
-        throw new im.status.keycard.io.APDUException(this.sw, "security condition not satisfied");
+        throw new APDUException(this.sw, "security condition not satisfied");
       case SW_AUTHENTICATION_METHOD_BLOCKED:
-        throw new im.status.keycard.io.APDUException(this.sw, "authentication method blocked");
+        throw new APDUException(this.sw, "authentication method blocked");
       default:
-        throw new im.status.keycard.io.APDUException(this.sw,  "Unexpected error SW");
+        throw new APDUException(this.sw,  "Unexpected error SW");
     }
   }
 
@@ -93,9 +93,9 @@ public class APDUResponse {
    *
    * @param message the error message
    * @return this object, to simplify chaining
-   * @throws im.status.keycard.io.APDUException if the SW is not 0x9000
+   * @throws APDUException if the SW is not 0x9000
    */
-  public APDUResponse checkOK(String message) throws im.status.keycard.io.APDUException {
+  public APDUResponse checkOK(String message) throws APDUException {
     return checkSW(message, SW_OK);
   }
 
@@ -105,23 +105,23 @@ public class APDUResponse {
    * @param message the error message
    * @param codes the list of SWs to match.
    * @return this object, to simplify chaining
-   * @throws im.status.keycard.io.APDUException if the SW is not 0x9000
+   * @throws APDUException if the SW is not 0x9000
    */
-  public APDUResponse checkSW(String message, int... codes) throws im.status.keycard.io.APDUException {
+  public APDUResponse checkSW(String message, int... codes) throws APDUException {
     for (int code : codes) {
       if (this.sw == code) {
         return this;
       }
     }
 
-    throw new im.status.keycard.io.APDUException(this.sw, message);
+    throw new APDUException(this.sw, message);
   }
 
   /**
    * Checks response from an authentication command (VERIFY PIN, UNBLOCK PUK)
    *
    * @throws WrongPINException wrong PIN
-   * @throws im.status.keycard.io.APDUException unexpected response
+   * @throws APDUException unexpected response
    */
   public APDUResponse checkAuthOK() throws WrongPINException, APDUException {
     if ((this.sw & SW_WRONG_PIN_MASK) == SW_WRONG_PIN_MASK) {

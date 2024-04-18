@@ -4,8 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
-import im.status.keycard.globalplatform.Crypto;
-import im.status.keycard.io.APDUCommand;
+import ism.ase.ro.keycardlocal.util.io.APDUCommand;
+
 
 /**
  * Adds a SCP02 MAC to APDUs.

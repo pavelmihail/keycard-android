@@ -1,6 +1,5 @@
 package ism.ase.ro.keycardlocal.util.applet;
 
-import im.status.keycard.applet.TinyBERTLV;
 
 /**
  * Parses the response from a SELECT command. If the card has not yet received the INIT command the isInitializedCard
@@ -36,7 +35,7 @@ public class ApplicationInfo {
    * @throws IllegalArgumentException the TLV does not follow the allowed format
    */
   public ApplicationInfo(byte[] tlvData) throws IllegalArgumentException {
-    im.status.keycard.applet.TinyBERTLV tlv = new im.status.keycard.applet.TinyBERTLV(tlvData);
+    TinyBERTLV tlv = new TinyBERTLV(tlvData);
 
     int topTag = tlv.readTag();
     tlv.unreadLastTag();

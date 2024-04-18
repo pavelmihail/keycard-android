@@ -1,8 +1,5 @@
 package ism.ase.ro.keycardlocal.util.applet;
 
-import im.status.keycard.applet.ApplicationInfo;
-import im.status.keycard.applet.TinyBERTLV;
-
 /**
  * Parses the response from a SELECT command sent to the Cash applet.
  */
@@ -20,10 +17,10 @@ public class CashApplicationInfo {
    * @throws IllegalArgumentException the TLV does not follow the allowed format
    */
   public CashApplicationInfo(byte[] tlvData) throws IllegalArgumentException {
-    im.status.keycard.applet.TinyBERTLV tlv = new TinyBERTLV(tlvData);
+    TinyBERTLV tlv = new TinyBERTLV(tlvData);
 
-    tlv.enterConstructed(im.status.keycard.applet.ApplicationInfo.TLV_APPLICATION_INFO_TEMPLATE);
-    pubKey = tlv.readPrimitive(im.status.keycard.applet.ApplicationInfo.TLV_PUB_KEY);
+    tlv.enterConstructed(ApplicationInfo.TLV_APPLICATION_INFO_TEMPLATE);
+    pubKey = tlv.readPrimitive(ApplicationInfo.TLV_PUB_KEY);
     appVersion = (short) tlv.readInt();
     pubData = tlv.readPrimitive(TLV_PUB_DATA);
   }

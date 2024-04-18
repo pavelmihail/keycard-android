@@ -17,9 +17,6 @@ import org.bouncycastle.jce.interfaces.ECPrivateKey;
 import org.bouncycastle.jce.spec.ECPublicKeySpec;
 import org.bouncycastle.util.Arrays;
 
-import im.status.keycard.applet.RecoverableSignature;
-import im.status.keycard.applet.TinyBERTLV;
-
 public class Certificate extends RecoverableSignature {
   public static final byte TLV_CERT = (byte) 0x8A;
 

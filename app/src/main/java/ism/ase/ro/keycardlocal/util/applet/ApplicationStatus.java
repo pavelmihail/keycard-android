@@ -1,6 +1,5 @@
 package ism.ase.ro.keycardlocal.util.applet;
 
-import im.status.keycard.applet.TinyBERTLV;
 
 /**
  * Parses the result of a GET STATUS command retrieving application status.
@@ -18,7 +17,7 @@ public class ApplicationStatus {
    * @throws IllegalArgumentException if the TLV does not follow the expected format
    */
   public ApplicationStatus(byte[] tlvData) throws IllegalArgumentException {
-    im.status.keycard.applet.TinyBERTLV tlv = new TinyBERTLV(tlvData);
+    TinyBERTLV tlv = new TinyBERTLV(tlvData);
     tlv.enterConstructed(TLV_APPLICATION_STATUS_TEMPLATE);
     pinRetryCount = (byte) tlv.readInt();
     pukRetryCount = (byte) tlv.readInt();

@@ -1,12 +1,7 @@
 package ism.ase.ro.keycardlocal.util.applet;
 
-import im.status.keycard.applet.ApplicationInfo;
-import im.status.keycard.applet.BIP32KeyPair;
-import im.status.keycard.applet.Identifiers;
-import im.status.keycard.applet.KeyPath;
-import im.status.keycard.applet.Pairing;
-import im.status.keycard.applet.SecureChannelSession;
-import im.status.keycard.io.*;
+import static ism.ase.ro.keycardlocal.util.applet.Identifiers.KEYCARD_DEFAULT_INSTANCE_IDX;
+
 import org.bouncycastle.jce.interfaces.ECPrivateKey;
 import org.bouncycastle.jce.interfaces.ECPublicKey;
 
@@ -16,6 +11,11 @@ import javax.crypto.spec.PBEKeySpec;
 import java.io.IOException;
 import java.security.KeyPair;
 import java.util.Arrays;
+
+import ism.ase.ro.keycardlocal.util.io.APDUCommand;
+import ism.ase.ro.keycardlocal.util.io.APDUException;
+import ism.ase.ro.keycardlocal.util.io.APDUResponse;
+import ism.ase.ro.keycardlocal.util.io.CardChannel;
 
 /**
  * This class is used to send APDU to the applet. Each method corresponds to an APDU as defined in the APPLICATION.md
@@ -147,7 +147,7 @@ public class KeycardCommandSet {
    * @throws IOException communication error
    */
   public APDUResponse select() throws IOException {
-    return select(im.status.keycard.applet.Identifiers.KEYCARD_DEFAULT_INSTANCE_IDX);
+    return select(KEYCARD_DEFAULT_INSTANCE_IDX);
   }
 
   /**

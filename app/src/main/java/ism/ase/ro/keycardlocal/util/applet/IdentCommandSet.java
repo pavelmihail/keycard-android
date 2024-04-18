@@ -1,12 +1,11 @@
 package ism.ase.ro.keycardlocal.util.applet;
 
-import im.status.keycard.applet.Identifiers;
-import im.status.keycard.applet.KeycardCommandSet;
-import im.status.keycard.io.APDUCommand;
-import im.status.keycard.io.APDUResponse;
-import im.status.keycard.io.CardChannel;
 
 import java.io.IOException;
+
+import ism.ase.ro.keycardlocal.util.io.APDUCommand;
+import ism.ase.ro.keycardlocal.util.io.APDUResponse;
+import ism.ase.ro.keycardlocal.util.io.CardChannel;
 
 /**
  * Command set for the Ident applet.

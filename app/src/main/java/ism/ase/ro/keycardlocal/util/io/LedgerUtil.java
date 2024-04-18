@@ -14,7 +14,7 @@ public class LedgerUtil {
     void read(byte[] chunk) throws IOException;
   }
 
-  public static im.status.keycard.io.APDUResponse send(APDUCommand cmd, int segmentSize, boolean channelInfo, Callback cb) throws IOException {
+  public static APDUResponse send(APDUCommand cmd, int segmentSize, boolean channelInfo, Callback cb) throws IOException {
     int offset = 0;
 
     byte[] command = LedgerUtil.wrapCommandAPDU(cmd.serialize(), segmentSize, channelInfo);

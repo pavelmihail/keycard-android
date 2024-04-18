@@ -1,7 +1,11 @@
 package ism.ase.ro.keycardlocal.util.android;
 
+import android.Manifest;
 import android.bluetooth.*;
 import android.content.Context;
+import android.content.pm.PackageManager;
+
+import androidx.core.app.ActivityCompat;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -26,7 +30,8 @@ public class LedgerBLEChannel implements CardChannel {
   final private static int BLE_TIMEOUT = 2000;
 
 
-  final private BluetoothGatt bluetoothGatt;
+  private BluetoothGatt bluetoothGatt;
+  private final Context context;
   private BluetoothGattCharacteristic reqChar;
   private boolean connected;
   private int mtuSize;
@@ -34,22 +39,43 @@ public class LedgerBLEChannel implements CardChannel {
   private LinkedBlockingQueue<byte[]> readQueue;
 
   public LedgerBLEChannel(Context context, BluetoothDevice device, CardListener listener) {
+    this.context = context;
     this.connected = false;
     this.mtuSize = 20;
     this.readQueue = new LinkedBlockingQueue<>();
     this.writeStatus = BLE_WRITE_FINISHED;
     final CardChannel channel = this;
 
+    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+      // TODO: Consider calling
+      //    ActivityCompat#requestPermissions
+      // here to request the missing permissions, and then overriding
+      //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+      //                                          int[] grantResults)
+      // to handle the case where the user grants the permission. See the documentation
+      // for ActivityCompat#requestPermissions for more details.
+      return;
+    }
     this.bluetoothGatt = device.connectGatt(context, false, new BluetoothGattCallback() {
       @Override
       public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-        if (connected  == (newState ==  BluetoothProfile.STATE_CONNECTED)) {
+        if (connected == (newState == BluetoothProfile.STATE_CONNECTED)) {
           return;
         }
 
         connected = newState == BluetoothProfile.STATE_CONNECTED;
 
         if (connected) {
+          if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+          }
           bluetoothGatt.discoverServices();
         } else {
           (new Thread() {
@@ -66,6 +92,16 @@ public class LedgerBLEChannel implements CardChannel {
         BluetoothGattService service = bluetoothGatt.getService(LEDGER_UUID);
 
         if (service == null) {
+          if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+          }
           bluetoothGatt.disconnect();
           connected = false;
           return;
@@ -87,7 +123,17 @@ public class LedgerBLEChannel implements CardChannel {
 
       @Override
       public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
-        reqChar.setValue(new byte[] {0x08, 0x00, 0x00, 0x00, 0x00});
+        reqChar.setValue(new byte[]{0x08, 0x00, 0x00, 0x00, 0x00});
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+          // TODO: Consider calling
+          //    ActivityCompat#requestPermissions
+          // here to request the missing permissions, and then overriding
+          //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+          //                                          int[] grantResults)
+          // to handle the case where the user grants the permission. See the documentation
+          // for ActivityCompat#requestPermissions for more details.
+          return;
+        }
         bluetoothGatt.writeCharacteristic(reqChar);
       }
 
@@ -118,10 +164,20 @@ public class LedgerBLEChannel implements CardChannel {
       public void write(byte[] chunk) throws IOException {
         writeStatus = BLE_WRITE_STARTED;
         reqChar.setValue(chunk);
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+          // TODO: Consider calling
+          //    ActivityCompat#requestPermissions
+          // here to request the missing permissions, and then overriding
+          //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+          //                                          int[] grantResults)
+          // to handle the case where the user grants the permission. See the documentation
+          // for ActivityCompat#requestPermissions for more details.
+          return;
+        }
         bluetoothGatt.writeCharacteristic(reqChar);
 
         long timeout = 0;
-        while(writeStatus == BLE_WRITE_STARTED || timeout >= BLE_TIMEOUT) {
+        while (writeStatus == BLE_WRITE_STARTED || timeout >= BLE_TIMEOUT) {
           try {
             Thread.sleep(10);
             timeout += 10;
@@ -163,6 +219,16 @@ public class LedgerBLEChannel implements CardChannel {
   }
 
   public void close() {
+    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+      // TODO: Consider calling
+      //    ActivityCompat#requestPermissions
+      // here to request the missing permissions, and then overriding
+      //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+      //                                          int[] grantResults)
+      // to handle the case where the user grants the permission. See the documentation
+      // for ActivityCompat#requestPermissions for more details.
+      return;
+    }
     bluetoothGatt.close();
   }
 

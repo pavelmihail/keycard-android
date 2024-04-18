@@ -12,10 +12,6 @@ import org.bouncycastle.math.ec.custom.sec.SecP256K1Curve;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-import im.status.keycard.applet.ApplicationInfo;
-import im.status.keycard.applet.Ethereum;
-import im.status.keycard.applet.TinyBERTLV;
-
 /**
  * Signature with recoverable public key.
  */

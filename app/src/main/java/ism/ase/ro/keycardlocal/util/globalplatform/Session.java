@@ -1,12 +1,11 @@
 package ism.ase.ro.keycardlocal.util.globalplatform;
 
-import im.status.keycard.globalplatform.SCP02Keys;
 
 /**
  * SCP02 Session.
  */
 public class Session {
-  private im.status.keycard.globalplatform.SCP02Keys keys;
+  private SCP02Keys keys;
   private byte[] cardChallenge;
   private boolean fallbackKeys;
 
@@ -16,7 +15,7 @@ public class Session {
    * @param keys the session keys
    * @param cardChallenge the card challenge
    */
-  public Session(im.status.keycard.globalplatform.SCP02Keys keys, byte[] cardChallenge) {
+  public Session(SCP02Keys keys, byte[] cardChallenge) {
     this.keys = keys;
     this.cardChallenge = cardChallenge;
     this.fallbackKeys = false;

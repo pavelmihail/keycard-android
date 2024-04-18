@@ -1,8 +1,10 @@
 package ism.ase.ro.keycardlocal.util.applet;
 
-import java.util.StringTokenizer;
+import static ism.ase.ro.keycardlocal.util.applet.KeycardCommandSet.DERIVE_P1_SOURCE_CURRENT;
+import static ism.ase.ro.keycardlocal.util.applet.KeycardCommandSet.DERIVE_P1_SOURCE_MASTER;
+import static ism.ase.ro.keycardlocal.util.applet.KeycardCommandSet.DERIVE_P1_SOURCE_PARENT;
 
-import im.status.keycard.applet.KeycardCommandSet;
+import java.util.StringTokenizer;
 
 /**
  * Keypath object to be used with the KeycardCommandSet
@@ -34,16 +36,16 @@ public class KeyPath {
 
     switch(sourceOrFirstElement) {
       case "m":
-        source = im.status.keycard.applet.KeycardCommandSet.DERIVE_P1_SOURCE_MASTER;
+        source = DERIVE_P1_SOURCE_MASTER;
         break;
       case "..":
-        source = im.status.keycard.applet.KeycardCommandSet.DERIVE_P1_SOURCE_PARENT;
+        source = DERIVE_P1_SOURCE_PARENT;
         break;
       case ".":
-        source = im.status.keycard.applet.KeycardCommandSet.DERIVE_P1_SOURCE_CURRENT;
+        source = DERIVE_P1_SOURCE_CURRENT;
         break;
       default:
-        source = im.status.keycard.applet.KeycardCommandSet.DERIVE_P1_SOURCE_CURRENT;
+        source = DERIVE_P1_SOURCE_CURRENT;
         tokenizer = new StringTokenizer(keypath, "/"); // rewind
         break;
     }
@@ -67,7 +69,7 @@ public class KeyPath {
   }
 
   public KeyPath(byte[] data) {
-    this(data, im.status.keycard.applet.KeycardCommandSet.DERIVE_P1_SOURCE_MASTER);
+    this(data, DERIVE_P1_SOURCE_MASTER);
   }
 
   private long parseComponent(String num) {
@@ -117,13 +119,13 @@ public class KeyPath {
     StringBuffer sb = new StringBuffer();
 
     switch(source) {
-      case im.status.keycard.applet.KeycardCommandSet.DERIVE_P1_SOURCE_MASTER:
+      case DERIVE_P1_SOURCE_MASTER:
         sb.append('m');
         break;
-      case im.status.keycard.applet.KeycardCommandSet.DERIVE_P1_SOURCE_PARENT:
+      case DERIVE_P1_SOURCE_PARENT:
         sb.append("..");
         break;
-      case KeycardCommandSet.DERIVE_P1_SOURCE_CURRENT:
+      case DERIVE_P1_SOURCE_CURRENT:
         sb.append('.');
         break;
     }
