@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
                     // can be either generated or chosen by the user. Using fixed values is highly discouraged.
                     if (!info.isInitializedCard()) {
                         Log.i(TAG, "Initializing card with test secrets")
-                        cmdSet.init("12345", "123456789012", "KeycardTest").checkOK()
+                        cmdSet.init("000000", "123456789012", "KeycardTest").checkOK()
                         info = ApplicationInfo(cmdSet.select().checkOK().getData())
                     }
                     Log.i(TAG, "Instance UID: " + Hex.toHexString(info.getInstanceUID()))
@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     if (info.hasCredentialsManagementCapability()) {
                         // PIN authentication allows execution of privileged commands
-                        cmdSet.verifyPIN("12345").checkAuthOK()
+                        cmdSet.verifyPIN("000000").checkAuthOK()
                         Log.i(TAG, "Pin Verified.")
                     }
 
